@@ -35,6 +35,8 @@ import java.util.Objects;
 import org.opennms.netmgt.graph.api.AbstractEdge;
 import org.opennms.netmgt.graph.api.VertexRef;
 
+import com.google.common.base.MoreObjects;
+
 public class GenericEdge extends AbstractEdge<GenericVertex> {
 
     private Map<String, Object> properties = new HashMap<>();
@@ -60,6 +62,13 @@ public class GenericEdge extends AbstractEdge<GenericVertex> {
 
     public void setProperty(String key, Object value) {
         properties.put(key, value);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("properties", properties)
+                .toString();
     }
 
     @Override
