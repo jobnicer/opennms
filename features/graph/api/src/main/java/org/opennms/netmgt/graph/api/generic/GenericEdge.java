@@ -65,6 +65,7 @@ public class GenericEdge extends AbstractEdge<GenericVertex> {
     }
 
     @Override
+    // TODO MVR remove again after endless recursion is fixed
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("properties", properties)
