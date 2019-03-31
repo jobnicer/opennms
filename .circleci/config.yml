@@ -4,6 +4,9 @@ executors:
   build-executor:
     docker:
       - image: opennms/build-env:1.0-b6
+  docker-executor:
+    docker:
+      - image: docker:18.09.3-ce-git
   smoke-test-executor:
     machine: true
 
@@ -50,6 +53,9 @@ workflows:
   build-deploy:
     jobs:
       - build
+      - build-horizon-oci:
+          requires:
+            - build
       - smoke-test:
           requires:
             - build
@@ -68,18 +74,43 @@ jobs:
           command: |
             mvn clean -DskipTests=true
             ./compile.pl -DskipTests=true -Dbuild.skip.tarball=true
-            #      - run:
-            #          name: Build RPMs
-            #          command: |
-            #            ./makerpm.sh -a -d
+      - run:
+          name: Build RPMs
+          command: |
+            ./makerpm.sh -a -d
       - save-maven-cache
-        #- store_artifacts:
-        #    path: ~/project/target/rpm/RPMS/noarch
-        #    destination: rpms
+      - store_artifacts:
+          path: ~/project/target/rpm/RPMS/noarch
+          destination: rpms
       - persist_to_workspace:
           root: ~/
           paths:
             - project
+  
+  build-horizon-oci:
+    executor: docker-executor
+    steps:
+      - attach_workspace:
+          at: ~/
+      - setup_remote_docker
+      - run: 
+          name: Switch to Horizon Docker build environment
+          command: |
+            cd project/opennms-container/horizon
+      - run:
+          name: Fetchg RPMs to install Horizon
+          command: |
+            cp target/rpm/RPMS/noarch/opennms-core-*.noarch.rpm rpms
+            cp target/rpm/RPMS/noarch/opennms-webapp-jetty-*.noarch.rpms
+            cp target/rpm/RPMS/noarch/opennms-webapp-hawtio-*.noarch.rpms 
+      - run:
+          name: Build Horizon Docker container image
+          command: |
+            cd horizon
+            ./build_container_image.sh
+      - store_artifacts:
+          path: ~/project/opennms-container/horizon/images/container.oci
+          destination: horizon
 
   smoke-test:
     executor: smoke-test-executor
