@@ -6,7 +6,7 @@ executors:
       - image: opennms/build-env:1.0-b6
   docker-executor:
     docker:
-      - image: docker:18.09.3-ce-git
+      - image: docker:18.06.3-ce-git
   smoke-test-executor:
     machine: true
 
