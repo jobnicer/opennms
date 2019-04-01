@@ -48,6 +48,8 @@ LABEL maintainer="The OpenNMS Group" \
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 
+STOPSIGNAL SIGTERM
+
 CMD [ "-f" ]
 
 ### Containers should NOT run as root as a good practice

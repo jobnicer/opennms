@@ -56,6 +56,8 @@ WORKDIR /opt/opennms
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 
+STOPSIGNAL SIGTERM
+
 CMD [ "-h" ]
 
 ### Runtime information and not relevant at build time
