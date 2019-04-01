@@ -16,6 +16,7 @@ docker build -t "${CONTAINER_PROJECT}:${IMAGE_VERSION}" \
   --build-arg REPO_KEY_URL="${REPO_KEY_URL}" \
   --build-arg VERSION="${VERSION}" \
   --build-arg PACKAGES="${PACKAGES}" \
+  --build-arg ONMS_PACKAGES="${ONMS_PACKAGES}" \
   .
 
 docker image save "${CONTAINER_PROJECT}:${IMAGE_VERSION}" -o "${CONTAINER_IMAGE}"

@@ -93,20 +93,19 @@ jobs:
       - attach_workspace:
           at: ~/
       - setup_remote_docker
-      - run: 
-          name: Switch to Horizon Docker build environment
-          command: |
-            cd project/opennms-container/horizon
       - run:
-          name: Fetchg RPMs to install Horizon
+          name: Add bash support
           command: |
-            cp target/rpm/RPMS/noarch/opennms-core-*.noarch.rpm rpms
-            cp target/rpm/RPMS/noarch/opennms-webapp-jetty-*.noarch.rpms
-            cp target/rpm/RPMS/noarch/opennms-webapp-hawtio-*.noarch.rpms 
+            apk add --no-cache bash
+      - run:
+          name: Fetch RPMs to install Horizon
+          command: |
+            source opennms-container/horizon/config.sh
+            for PKG in ${ONMS_PACKAGES}; do cp target/rpm/RPMS/noarch/"${PKG}"*.rpm opennms-container/horizon/rpms; done
       - run:
           name: Build Horizon Docker container image
           command: |
-            cd horizon
+            cd opennms-container/horizon
             ./build_container_image.sh
       - store_artifacts:
           path: ~/project/opennms-container/horizon/images/container.oci

@@ -30,3 +30,11 @@ yarn-error.log
 /features/discovery/activemq-data
 /features/topology-map/org.opennms.features.topology.app/www-test/
 /opennms-alarms/jms-northbounder/activemq-data/
+
+# Docker OCI
+opennms-container/horizon/rpms
+opennms-container/horizon/images
+opennms-container/minion/rpms
+opennms-container/minion/images
+opennms-container/sentinel/rpms
+opennms-container/sentinel/images
