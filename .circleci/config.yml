@@ -56,6 +56,12 @@ workflows:
       - build-horizon-oci:
           requires:
             - build
+      - build-minion-oci:
+          requires:
+            - build
+      - build-sentinel-oci:
+          requires:
+            - build
       - smoke-test:
           requires:
             - build
@@ -110,6 +116,54 @@ jobs:
       - store_artifacts:
           path: ~/project/opennms-container/horizon/images/container.oci
           destination: horizon
+
+  build-minion-oci:
+    executor: docker-executor
+    steps:
+      - attach_workspace:
+          at: ~/
+      - setup_remote_docker
+      - run:
+          name: Add bash support
+          command: |
+            apk add --no-cache bash
+      - run:
+          name: Fetch RPMs to install Minion
+          command: |
+            source opennms-container/minion/config.sh
+            for PKG in ${MINION_PACKAGES}; do cp target/rpm/RPMS/noarch/"${PKG}"*.rpm opennms-container/minion/rpms; done
+      - run:
+          name: Build Minion Docker container image
+          command: |
+            cd opennms-container/minion
+            ./build_container_image.sh
+      - store_artifacts:
+          path: ~/project/opennms-container/minion/images/container.oci
+          destination: minion
+
+  build-sentinel-oci:
+    executor: docker-executor
+    steps:
+      - attach_workspace:
+          at: ~/
+      - setup_remote_docker
+      - run:
+          name: Add bash support
+          command: |
+            apk add --no-cache bash
+      - run:
+          name: Fetch RPMs to install Sentinel
+          command: |
+            source opennms-container/sentinel/config.sh
+            for PKG in ${SENTINEL_PACKAGES}; do cp target/rpm/RPMS/noarch/"${PKG}"*.rpm opennms-container/sentinel/rpms; done
+      - run:
+          name: Build Sentinel Docker container image
+          command: |
+            cd opennms-container/sentinel
+            ./build_container_image.sh
+      - store_artifacts:
+          path: ~/project/opennms-container/sentinel/images/container.oci
+          destination: sentinel
 
   smoke-test:
     executor: smoke-test-executor

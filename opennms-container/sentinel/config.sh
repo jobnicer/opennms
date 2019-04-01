@@ -26,8 +26,7 @@ PACKAGES="wget
 # By default the build system will build the RPMS in the ./rpms directory and install from here.
 #
 # Suggested packages to install OpenNMS Minion packages from repository
-# PACKAGES="${PACKAGES}
-#           opennms-sentinel"
+SENTINEL_PACKAGES="opennms-sentinel"
 
 # Run as user
 USER="sentinel"

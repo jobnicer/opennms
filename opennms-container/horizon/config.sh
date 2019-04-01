@@ -18,15 +18,15 @@ REPO_RPM="https://${REPO_HOST}/repofiles/opennms-repo-${REPO_RELEASE}-rhel7.noar
 REPO_KEY_URL="https://${REPO_HOST}/OPENNMS-GPG-KEY"
 
 # System Package dependencies
-PACKAGES="wget \
+PACKAGES="wget
           gettext"
 
 # OpenNMS Horizon dependencies
-PACKAGES="${PACKAGES} \
-          rrdtool \
-          jicmp \
-          jicmp6 \
-          jrrd2 \
+PACKAGES="${PACKAGES}
+          rrdtool
+          jicmp
+          jicmp6
+          jrrd2
           R-core"
 
 #
@@ -35,15 +35,15 @@ PACKAGES="${PACKAGES} \
 #
 # Suggested packages to install OpenNMS Horizon packages from repository
 #
-ONMS_PACKAGES="opennms-core \
-               opennms-webapp-jetty \
-               opennms-webapp-hawtio \
-               opennms-webapp-remoting \
-               opennms-plugin-northbounder-jms \
-               opennms-plugin-protocol-cifs \
-               opennms-plugin-protocol-nsclient \
-               opennms-plugin-protocol-radius \
-               opennms-plugin-provisioning-dns \
-               opennms-plugin-provisioning-reverse-dns \
-               opennms-plugin-provisioning-snmp-asset \
+ONMS_PACKAGES="opennms-core
+               opennms-webapp-jetty
+               opennms-webapp-hawtio
+               opennms-webapp-remoting
+               opennms-plugin-northbounder-jms
+               opennms-plugin-protocol-cifs
+               opennms-plugin-protocol-nsclient
+               opennms-plugin-protocol-radius
+               opennms-plugin-provisioning-dns
+               opennms-plugin-provisioning-reverse-dns
+               opennms-plugin-provisioning-snmp-asset
                opennms-plugin-provisioning-snmp-hardware-inventory"

@@ -17,6 +17,8 @@ ARG REPO_RPM="https://${REPO_HOST}/repofiles/opennms-repo-${REPO_RELEASE}-rhel7.
 
 ARG PACKAGES="wget gettext"
 
+ARG MINION_PACKAGES="opennms-minion"
+
 COPY ./rpms /tmp/rpms
 
 SHELL ["/bin/bash", "-c"]
@@ -25,16 +27,16 @@ SHELL ["/bin/bash", "-c"]
 RUN yum -y install epel-release && \
     rpm --import "${REPO_KEY_URL}" && \
     yum -y install ${REPO_RPM} && \
-    if [ "$(ls -1 /tmp/rpms/*.rpm 2>/dev/null | wc -l)" != 0 ]; then cd /tmp/rpms && yum -y localinstall *.rpm; fi && \
-    rm -rf /tmp/rpms && \
     yum -y install ${PACKAGES} && \
+    if [ "$(ls -1 /tmp/rpms/*.rpm 2>/dev/null | wc -l)" != 0 ]; then yum -y localinstall /tmp/rpms/*.rpm; else yum -y install ${MINION_PACKAGES}; fi && \
+    rm -rf /tmp/rpms && \
     yum clean all && \
     rm -rf /var/cache/yum && \
     sed -r -i '/RUNAS/s/.*/export RUNAS=${USER}/' /etc/sysconfig/minion && \
     chgrp -R 0 /opt/minion && \
     chmod -R g=u /opt/minion
 
-COPY ./entrypoint.sh /
+COPY ./assets/entrypoint.sh /
 
 LABEL maintainer="The OpenNMS Group" \
       license="AGPLv3" \
@@ -69,4 +71,4 @@ ENV MINION_ID="00000000-0000-0000-0000-deadbeef0001" \
 ## -- OpenNMS JMX         18980/TCP
 ## -- SNMP Trapd           1162/UDP
 ## -- Syslog               1514/UDP
-EXPOSE 8201/tcp 18980/tcp 1162/udp 1514/udp
+EXPOSE 8201/tcp 1162/udp 1514/udp

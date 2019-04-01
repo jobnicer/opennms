@@ -19,15 +19,18 @@ REPO_KEY_URL="https://${REPO_HOST}/OPENNMS-GPG-KEY"
 
 # System Package dependencies
 PACKAGES="wget
-          gettext"
+          gettext
+          jicmp
+          jicmp6"
 
 #
 # If you want to install packages from the official repository, add your packages here.
 # By default the build system will build the RPMS in the ./rpms directory and install from here.
 #
 # Suggested packages to install OpenNMS Minion packages from repository
-# PACKAGES="${PACKAGES}
-#           opennms-minion
+MINION_PACKAGES="opennms-minion-container
+                 opennms-minion-features-core
+                 opennms-minion-features-default"
 
 # Run as user
 USER="minion"
