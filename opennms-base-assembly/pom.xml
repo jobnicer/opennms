@@ -821,8 +821,18 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.opennms.core.ipc.rpc</groupId>
-      <artifactId>org.opennms.core.ipc.rpc.tracer-registry</artifactId>
+      <groupId>org.opennms.core.tracing</groupId>
+      <artifactId>org.opennms.core.tracing.api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opennms.core.tracing</groupId>
+      <artifactId>org.opennms.core.tracing.registry</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opennms.core.tracing</groupId>
+      <artifactId>org.opennms.core.tracing.jaeger-tracer</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>

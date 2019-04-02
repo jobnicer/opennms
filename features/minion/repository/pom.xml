@@ -59,7 +59,8 @@
                                 <feature>minion-icmp-proxy</feature>
                                 <feature>minion-telemetryd-receivers</feature>
                                 <feature>hawtio-offline</feature>
-				<feature>cxf-commands/${cxfVersion}</feature>
+				                <feature>cxf-commands/${cxfVersion}</feature>
+                                <feature>jeager-tracer-wrapper</feature>
                             </features>
                             <repository>${project.build.directory}/maven-repo</repository>
                         </configuration>
@@ -281,6 +282,16 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.opennms.core.tracing</groupId>
+            <artifactId>org.opennms.core.tracing.api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.opennms.core.tracing</groupId>
+            <artifactId>org.opennms.core.tracing.registry</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.opennms.features.distributed</groupId>
             <artifactId>org.opennms.features.distributed.dao-api</artifactId>
 	    <version>${project.version}</version>
@@ -292,6 +303,11 @@
         <dependency>
             <groupId>org.opennms.features.poller.monitors</groupId>
             <artifactId>org.opennms.features.poller.monitors.core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.opennms.core.tracing</groupId>
+            <artifactId>org.opennms.core.tracing.jaeger-tracer</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

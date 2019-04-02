@@ -1737,6 +1737,16 @@
         <version>${project.version}</version>
       </dependency>
       <dependency>
+        <groupId>org.opennms.core.tracing</groupId>
+        <artifactId>org.opennms.core.tracing.api</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.opennms.core.tracing</groupId>
+        <artifactId>org.opennms.core.tracing.registry</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
         <groupId>org.opennms.core</groupId>
         <artifactId>org.opennms.core.runtime</artifactId>
         <version>${project.version}</version>

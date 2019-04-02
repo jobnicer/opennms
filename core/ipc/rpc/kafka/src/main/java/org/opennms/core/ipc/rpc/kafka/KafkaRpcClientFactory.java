@@ -79,7 +79,7 @@ import org.opennms.core.rpc.api.RpcClientFactory;
 import org.opennms.core.rpc.api.RpcModule;
 import org.opennms.core.rpc.api.RpcRequest;
 import org.opennms.core.rpc.api.RpcResponse;
-import org.opennms.core.rpc.api.TracerRegistry;
+import org.opennms.core.tracing.api.TracerRegistry;
 import org.opennms.core.utils.SystemInfoUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -135,8 +135,7 @@ public class KafkaRpcClientFactory implements RpcClientFactory {
 
     @Autowired
     private TracerRegistry tracerRegistry;
-    private Tracer tracer = tracerRegistry.getTracer(SystemInfoUtils.getInstanceId());
-
+    private Tracer tracer;
 
     @Override
     public <S extends RpcRequest, T extends RpcResponse> RpcClient<S, T> getClient(RpcModule<S, T> module) {
@@ -228,6 +227,11 @@ public class KafkaRpcClientFactory implements RpcClientFactory {
         this.tracerRegistry = tracerRegistry;
     }
 
+    public TracerRegistry getTracerRegistry() {
+        return tracerRegistry;
+    }
+
+
 
     public void start() {
         try (MDCCloseable mdc = Logging.withPrefixCloseable(RpcClientFactory.LOG_PREFIX)) {
@@ -251,6 +255,7 @@ public class KafkaRpcClientFactory implements RpcClientFactory {
             KafkaConsumer<String, byte[]> kafkaConsumer = new KafkaConsumer<>(kafkaConfig);
             kafkaConsumerRunner = new KafkaConsumerRunner(kafkaConsumer);
             executor.execute(kafkaConsumerRunner);
+            tracer = tracerRegistry.getTracer(SystemInfoUtils.getInstanceId());
             LOG.info("started  kafka consumer with : {}", kafkaConfig);
             // Start a new thread which handles timeouts from delayQueue and calls response callback.
             timerExecutor.execute(() -> {

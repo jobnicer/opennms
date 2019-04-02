@@ -71,10 +71,14 @@ import org.opennms.core.rpc.echo.EchoResponse;
 import org.opennms.core.rpc.echo.EchoRpcModule;
 import org.opennms.core.rpc.echo.MyEchoException;
 import org.opennms.core.test.kafka.JUnitKafkaServer;
+import org.opennms.core.tracing.api.TracerRegistry;
 import org.opennms.distributed.core.api.MinionIdentity;
 import org.osgi.service.cm.ConfigurationAdmin;
 
 import com.google.common.base.Strings;
+
+import io.opentracing.Tracer;
+import io.opentracing.util.GlobalTracer;
 
 public class RpcKafkaIT {
 
@@ -118,7 +122,18 @@ public class RpcKafkaIT {
         when(configAdmin.getConfiguration(KafkaRpcConstants.KAFKA_CONFIG_PID).getProperties())
                 .thenReturn(kafkaConfig);
         minionIdentity = new MockMinionIdentity(REMOTE_LOCATION_NAME);
-        kafkaRpcServer = new KafkaRpcServerManager(new OsgiKafkaConfigProvider(KafkaRpcConstants.KAFKA_CONFIG_PID, configAdmin), minionIdentity);
+        TracerRegistry tracerRegistry = new TracerRegistry() {
+            @Override
+            public Tracer getTracer(String serviceName) {
+                return GlobalTracer.get();
+            }
+
+            @Override
+            public boolean isRegistered() {
+                return false;
+            }
+        };
+        kafkaRpcServer = new KafkaRpcServerManager(new OsgiKafkaConfigProvider(KafkaRpcConstants.KAFKA_CONFIG_PID, configAdmin), minionIdentity,tracerRegistry);
         kafkaRpcServer.init();
         kafkaRpcServer.bind(echoRpcModule);
     }
